@@ -7,7 +7,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-  if (!req.body.name) {
+  if (req.path != '/who' && !req.body.name) {
     res.status(400).send('You did not specify a name in the request body');
     return;
   }
@@ -16,7 +16,6 @@ app.use((req, res, next) => {
 
 function security1(req, res, next) {
   if (req.body.security1 === 9 * 9) {
-    console.log(req.body.name + ' has completed challenge 1');
     next();
   } else {
     res.status(400).send('You failed challenge 1');
@@ -25,9 +24,9 @@ function security1(req, res, next) {
 
 function legPressCheck(req, res, next) {
   if (req.body.howManyLegPressesCanTylerDo === answers.howManyLegPressesCanTylerDo) {
-    console.log(req.body.name + ' has completed challenge 2');
     next();
   } else {
+    console.log(req.body.name + ' has completed challenge 1');
     res.status(400).send('You passed challenge 1! But you failed challenge 2');
   }
 }
@@ -35,9 +34,9 @@ function legPressCheck(req, res, next) {
 function awesomenessCheck(req, res, next) {
   axios.get(`http://localhost:${port}/who`).then(response => {
     if (req.body.whoIsAwesome === response.data) {
-      console.log(req.body.name + ' has completed challenge 3');
       next();
     } else {
+      console.log(req.body.name + ' has completed challenge 2');
       res.status(400).send('You passed challenge 2! But you failed challenge 3');
     }
   }).catch(error => {
@@ -49,7 +48,7 @@ app.post('/challenge', security1, legPressCheck, awesomenessCheck, (req, res) =>
   console.log(req.body.name + ' has completed all challenges!');
   res.json({
     message: 'You did it!',
-    whoIsAwesome: 'you!',
+    whoIsAwesome: req.body.name + '!',
   });
 })
 
