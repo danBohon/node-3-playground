@@ -7,7 +7,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-  if (req.path != '/who' && !req.body.name) {
+  if (!req.body.name) {
     res.status(400).send('You did not specify a name in the request body');
     return;
   }
@@ -32,7 +32,7 @@ function legPressCheck(req, res, next) {
 }
 
 function awesomenessCheck(req, res, next) {
-  axios.get(`http://localhost:${port}/who`).then(response => {
+  axios.post(`http://localhost:${port}/who`, { name: req.body.name }).then(response => {
     if (req.body.whoIsAwesome === response.data) {
       next();
     } else {
@@ -52,7 +52,7 @@ app.post('/challenge', security1, legPressCheck, awesomenessCheck, (req, res) =>
   });
 })
 
-app.get('/who', (req, res) => {
+app.post('/who', (req, res) => {
   res.send('me');
 });
 
