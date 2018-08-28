@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('./body-parser');
 const axios = require('axios');
-const answers = require('./answers');
+const values = require('./values');
 
 const app = express();
 
@@ -23,7 +23,7 @@ function security1(req, res, next) {
 }
 
 function legPressCheck(req, res, next) {
-  if (req.body.howManyLegPressesCanTylerDo === answers.howManyLegPressesCanTylerDo) {
+  if (req.body.howManyLegPressesCanTylerDo === values.howManyLegPressesCanTylerDo) {
     next();
   } else {
     console.log(req.body.name + ' has completed challenge 2');
