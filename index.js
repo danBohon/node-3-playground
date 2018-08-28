@@ -26,8 +26,8 @@ function legPressCheck(req, res, next) {
   if (req.body.howManyLegPressesCanTylerDo === answers.howManyLegPressesCanTylerDo) {
     next();
   } else {
-    console.log(req.body.name + ' has completed challenge 1');
-    res.status(400).send('You passed challenge 1! But you failed challenge 2');
+    console.log(req.body.name + ' has completed challenge 2');
+    res.status(400).send('You passed challenge 2! But you failed challenge 3');
   }
 }
 
@@ -36,15 +36,15 @@ function awesomenessCheck(req, res, next) {
     if (req.body.whoIsAwesome === response.data) {
       next();
     } else {
-      console.log(req.body.name + ' has completed challenge 2');
-      res.status(400).send('You passed challenge 2! But you failed challenge 3');
+      console.log(req.body.name + ' has completed challenge 3');
+      res.status(400).send('You passed challenge 3! But you failed challenge 4');
     }
   }).catch(error => {
     console.log('error', error);
   })
 }
 
-app.post('/challenge', security1, legPressCheck, awesomenessCheck, (req, res) => {
+app.post('/challenge', security1, cityCheck, legPressCheck, awesomenessCheck, (req, res) => {
   console.log(req.body.name + ' has completed all challenges!');
   res.json({
     message: 'You did it!',
@@ -60,3 +60,12 @@ const port = 3005;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
+function cityCheck(req, res, next) {
+  if (req.query.cool_city === 'phoenix') {
+    next();
+  } else {
+    console.log(req.body.name + ' has completed challenge 1');
+    res.status(400).send('You passed challenge 1! But you failed challenge 2');
+  }
+}
