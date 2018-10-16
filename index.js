@@ -5,14 +5,23 @@ const axios = require('axios');
 const app = express();
 
 app.use(bodyParser.json());
+const password = 'tylerrulessohard'
 
-app.get('/data', (req, res) => {
+function checkpassword(req, res, next) {
+  if (req.query.password !== password){
+    res.status(403).send('no soup for you');
+  } else{
+    next();
+  }
+}
+
+app.get('/data', checkpassword, (req, res) => {
   res.json({
     someData: 'pretend this is meaningful data, like URLs to pictures of the simpsons',
   });
 });
 
-app.get('/more-data', (req, res) => {
+app.get('/more-data', checkpassword, (req, res) => {
   res.json({
     moreData: 'I wish this data were protected!',
   });
